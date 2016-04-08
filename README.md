@@ -6,6 +6,11 @@ This package provides a library and a protocol to create [slugs](http://en.wikip
 
 By default, a slug will be containing _only_ chars `A-Za-z0-9` and the default seperator `-`.
 
+## This fork
+
+This fork includes additional transliterations for Japanese (hiragana) and Chinese (25,000 chinese characters).  Note that 
+as a result of adding Chinese, compile time is now quite a bit longer .....
+
 ## Library
 
 Using the library is straightforward, check out a few examples:
@@ -48,3 +53,4 @@ iex(12)> Slugify.slugify %User{}
 Special chars like `äöüéáÁÉ` will be replaced by rules given in the file [lib/replacements.exs](lib/replacements.exs).
 
 Modify that file if you need have own replacement rules and __recompile__.
+

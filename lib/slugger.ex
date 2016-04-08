@@ -34,7 +34,7 @@ defmodule Slugger do
   """
   def slugify(text, separator \\ @separator_char) do
     text
-    |> replace_special_chars
+    |> replace_non_latin_chars
     |> remove_unwanted_chars(separator, ~r/([^A-Za-z0-9])+/)
   end
   
@@ -58,7 +58,7 @@ defmodule Slugger do
   """
   def slugify_downcase(text, separator \\ @separator_char) do
     text
-    |> replace_special_chars
+    |> replace_non_latin_chars
     |> String.downcase
     |> remove_unwanted_chars(separator, ~r/([^a-z0-9])+/)
   end
@@ -69,7 +69,7 @@ defmodule Slugger do
     |> String.strip(separator)
   end
   
-  defp replace_special_chars(text) do
+  defp replace_non_latin_chars(text) do
     text |> to_char_list |> replace_chars |> to_string
   end
   
@@ -80,6 +80,21 @@ defmodule Slugger do
   for {search, replace} <- replacements do
     if search != @separator_char do
       defp replace_chars([unquote(search)|t]), do: unquote(replace) ++ replace_chars(t)
+    end
+  end
+  
+  # And also generate for Chinese to pinyin mappings.  Note these may be fine for
+  # slugs but won't include tonemarks.  Also it wont map in a manner predictable
+  # to Japanese speakers (Kanji pronunciation is different) or Korean speakers.
+  # Note that there are 25,000 of these so not completely sure this is the right strategy
+  filename = Path.expand("../data/chinese.dat", __DIR__)
+  Enum.each File.stream!(filename, [:utf8]), fn(line) ->
+    [search | [replace | _]] = String.split(line, ~r/[ 0-9]/)
+    [char | _] = String.to_char_list(search)
+    replace = String.to_char_list(replace)
+    if search != @separator_char do
+      # IO.write to_string(search)
+      defp replace_chars([unquote(char)|t]), do: unquote(replace) ++ replace_chars(t)
     end
   end
 
