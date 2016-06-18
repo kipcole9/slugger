@@ -1,7 +1,7 @@
 defmodule Slugger.Mixfile do
   use Mix.Project
 
-  def project do
+  def project() do
     [app: :slugger,
      name: "Slugger",
      source_url: "https://github.com/h4cc/slugger",
@@ -12,13 +12,13 @@ defmodule Slugger.Mixfile do
      deps: deps]
   end
 
-  defp description do
+  defp description() do
     """
     The library Slugger can generate slugs from given strings that can be used in URLs or file names.
     """
   end
 
-  defp package do
+  defp package() do
     [# These are the default files included in the package
      files: ["config", "test", "lib", "priv", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
      maintainers: ["Julius Beckmann"],
@@ -27,7 +27,7 @@ defmodule Slugger.Mixfile do
               "Docs" => "http://hexdocs.pm/slugger/"}]
   end
 
-  def application do
+  def application() do
     [applications: []]
   end
 
